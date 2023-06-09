@@ -759,8 +759,8 @@ int main(int argc, char *argv[]) {
                 inverse_matrix6(inverseMatrix->size, originalMatrix->data, inverseMatrix->data, inverseMatrix->i, inverseMatrix->j, inverseMatrix->value_to_change);
             else if(atoi(argv[1])==7)
                 updateInverseMatrix7(originalMatrix->size, inverseMatrix->data, line_vet, col_vet);
-            else if(atoi(argv[1])==8)
-                inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
+            //else if(atoi(argv[1])==8)
+            //    inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
 
             printMatrix(inverseMatrix);
             printf("%d%s\n", atoi(argv[1]), "-----------------------------------------------------------------------------------------------------------------------------------------------------\n");
