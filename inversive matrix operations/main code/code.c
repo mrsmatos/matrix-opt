@@ -542,19 +542,18 @@ void inverse_matrix6(int n, long double **matrix, long double ** inv_matrix, int
         }
     }
 
-    copyMatrix(inv_matrix, temp, n, n);
-    my_freeMatrix(u,n);
-    my_freeMatrix(v,n);
-    my_freeMatrix(temp,n);
-
-    // Print the updated inverse matrix
-    // printf("\nUpdated Inverse Matrix:\n");
+    //printf("\nUpdated Inverse Matrix:\n");
     // for (i = 0; i < n; i++) {
     //     for (j = 0; j < n; j++) {
-    //         printf("%f ", temp[i][j]);
+    //         printf("%Lf ", temp[i][j]);
     //     }
     //     printf("\n");
     // }
+
+    copyMatrix(temp, inv_matrix, n, n);
+    my_freeMatrix(u,n);
+    my_freeMatrix(v,n);
+    my_freeMatrix(temp,n);
 }
 
 // Function to update the inverse matrix using the Sherman-Morrison formula
@@ -697,12 +696,12 @@ int main(int argc, char *argv[]) {
     if (argc <=2){
         //read from keyborad or input file with two matrix and change command
         if (read_matrix_from_keyboard(&originalMatrix, &inverseMatrix) != -1){
-            //printf("Original Matrix %dx%d:\n",originalMatrix->size, originalMatrix->size);
-            //printMatrix(originalMatrix);
+            printf("Matriz Original %dx%d:\n",originalMatrix->size, originalMatrix->size);
+            printMatrix(originalMatrix);
 
-            //printf("\nInverse Matrix %dx%d:\n",inverseMatrix->size, inverseMatrix->size);
-            //printMatrix(inverseMatrix);
-            //printf("\n");
+            printf("\nMatrix Inversa %dx%d:\n",inverseMatrix->size, inverseMatrix->size);
+            printMatrix(inverseMatrix);
+            
             long double new_var = originalMatrix->value_to_change;// 69<->99   2x1
             //long double line_vet[] = {12,  new_var,  68,  30,  83,  31,  63,  24,  68,  36};
             long double line_vet[] = {12,  new_var,  68,  0,  0,  0,  0,  0,  0,  0};
@@ -731,19 +730,21 @@ int main(int argc, char *argv[]) {
                             -0.00450104, 
                             -0.0119108};
             
-            originalMatrix->data[ originalMatrix->i ][ originalMatrix->j ] = originalMatrix->value_to_change;//99-69
+            /*
+            originalMatrix->data[ originalMatrix->i ][ originalMatrix->j ] = originalMatrix->value_to_change;//////////////// 99-69 ////////////////
             printf("%s\n", "Inverse Matrix by Gauss-Jordan elimination with row swaps");
             long double** temp = my_allocateMatrix(originalMatrix->size, originalMatrix->size);
             copyMatrix(originalMatrix->data, temp, originalMatrix->size, originalMatrix->size);
             long double** buffer = my_invertMatrix(temp, originalMatrix->size);
             my_freeMatrix(buffer, originalMatrix->size);
             my_freeMatrix(temp, originalMatrix->size);
-            originalMatrix->data[ originalMatrix->i ][ originalMatrix->j ] = 69.0;//69-99
+            */
 
-            printf("************ New Inverse Matrix (Sherman-Morrison):\n");
+            printf("\nNova Matrix Inversa %dx%d:\n",inverseMatrix->size, inverseMatrix->size);
+            //printf("************ New Inverse Matrix (Sherman-Morrison):\n");
             if(atoi(argv[1])==0)
                 updateInverseMatrix_ONE_VECTOR(inverseMatrix, col_vet, originalMatrix->j);
-            //updateInverseMatrix_TWO_VECTOR(inverseMatrix->data,originalMatrix->data, col_vet, line_vet, originalMatrix->size );
+            // updateInverseMatrix_TWO_VECTOR(inverseMatrix->data,originalMatrix->data, col_vet, line_vet, originalMatrix->size );
             
             else if(atoi(argv[1])==1)
                 updateInverse_ONE_VALUE(&originalMatrix, &inverseMatrix, originalMatrix->i , originalMatrix->j, originalMatrix->value_to_change);
@@ -758,12 +759,12 @@ int main(int argc, char *argv[]) {
             else if(atoi(argv[1])==6)
                 inverse_matrix6(inverseMatrix->size, originalMatrix->data, inverseMatrix->data, inverseMatrix->i, inverseMatrix->j, inverseMatrix->value_to_change);
             else if(atoi(argv[1])==7)
-                updateInverseMatrix7(originalMatrix->size, inverseMatrix->data, line_vet, col_vet);
-            //else if(atoi(argv[1])==8)
-            //    inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
+               updateInverseMatrix7(originalMatrix->size, inverseMatrix->data, line_vet, col_vet);
+            else if(atoi(argv[1])==8)
+               inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
 
             printMatrix(inverseMatrix);
-            printf("%d%s\n", atoi(argv[1]), "-----------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            //printf("%d%s\n", atoi(argv[1]), "-----------------------------------------------------------------------------------------------------------------------------------------------------\n");
         }
         else{
             printf("ALOCATION ERROR\n");

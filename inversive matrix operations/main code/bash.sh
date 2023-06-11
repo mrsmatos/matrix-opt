@@ -1,6 +1,6 @@
 #!/bin/bash
 ./main 0 < matrix-10-triangular.in #
-./main 1 < matrix-10-triangular.in
+./main 1 < matrix-10-triangular.in #
 ./main 2 < matrix-10-triangular.in
 ./main 3 < matrix-10-triangular.in
 ./main 4 < matrix-10-triangular.in
