@@ -498,25 +498,6 @@ void inverse_matrix6(int n, long double **matrix, long double ** inv_matrix, int
     v = my_allocateMatrix(n,n);
     temp = my_allocateMatrix(n,n);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    /*
-    double temp_matrix[n][n];
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            temp_matrix[i][j] = (double) matrix[i][j];
-
-    gsl_matrix_view my_matrix = gsl_matrix_view_array(&temp_matrix[0][0], n, n);
-    gsl_permutation *p = gsl_permutation_alloc(n);
-    int signum;
-    long double determinant;
-    // Perform LU decomposition
-    gsl_linalg_LU_decomp(&my_matrix.matrix, p, &signum);
-    // Calculate the determinant
-    determinant = gsl_linalg_LU_det(&my_matrix.matrix, signum);
-    gsl_permutation_free(p);
-    */
-    ////////////////////////////////////////////////////////////////////////////////////////////
-
     // Calculate the determinant of the matrix
     for (i = 0; i < n; i++) {
         long double sub_det = matrix[0][i];
@@ -697,10 +678,10 @@ int main(int argc, char *argv[]) {
         //read from keyborad or input file with two matrix and change command
         if (read_matrix_from_keyboard(&originalMatrix, &inverseMatrix) != -1){
             printf("Matriz Original %dx%d:\n",originalMatrix->size, originalMatrix->size);
-            printMatrix(originalMatrix);
+            //printMatrix(originalMatrix);
 
             printf("\nMatrix Inversa %dx%d:\n",inverseMatrix->size, inverseMatrix->size);
-            printMatrix(inverseMatrix);
+            //printMatrix(inverseMatrix);
             
             long double new_var = originalMatrix->value_to_change;// 69<->99   2x1
             //long double line_vet[] = {12,  new_var,  68,  30,  83,  31,  63,  24,  68,  36};
@@ -730,41 +711,67 @@ int main(int argc, char *argv[]) {
                             -0.00450104, 
                             -0.0119108};
             
-            /*
-            originalMatrix->data[ originalMatrix->i ][ originalMatrix->j ] = originalMatrix->value_to_change;//////////////// 99-69 ////////////////
-            printf("%s\n", "Inverse Matrix by Gauss-Jordan elimination with row swaps");
-            long double** temp = my_allocateMatrix(originalMatrix->size, originalMatrix->size);
-            copyMatrix(originalMatrix->data, temp, originalMatrix->size, originalMatrix->size);
-            long double** buffer = my_invertMatrix(temp, originalMatrix->size);
-            my_freeMatrix(buffer, originalMatrix->size);
-            my_freeMatrix(temp, originalMatrix->size);
-            */
+            ///*
+            if(atoi(argv[1])==-1){
+                originalMatrix->data[ originalMatrix->i ][ originalMatrix->j ] = originalMatrix->value_to_change;//////////////// 99-69 ////////////////
+                printf("%s\n", "Inverse Matrix by Gauss-Jordan elimination with row swaps");
+                long double** temp = my_allocateMatrix(originalMatrix->size, originalMatrix->size);
+                copyMatrix(originalMatrix->data, temp, originalMatrix->size, originalMatrix->size);
+                long double** buffer = my_invertMatrix(temp, originalMatrix->size);
+                my_freeMatrix(buffer, originalMatrix->size);
+                my_freeMatrix(temp, originalMatrix->size);
+            }
+            //*/
+            else{
+                printf("\nNova Matrix Inversa %dx%d:\n",inverseMatrix->size, inverseMatrix->size);
+                //printf("************ New Inverse Matrix (Sherman-Morrison):\n");
+                if(atoi(argv[1])==0)
+                    updateInverseMatrix_ONE_VECTOR(inverseMatrix, col_vet, originalMatrix->j);
+                // updateInverseMatrix_TWO_VECTOR(inverseMatrix->data,originalMatrix->data, col_vet, line_vet, originalMatrix->size );
+                
+                else if(atoi(argv[1])==1)
+                    updateInverse_ONE_VALUE(&originalMatrix, &inverseMatrix, originalMatrix->i , originalMatrix->j, originalMatrix->value_to_change);
+                else if(atoi(argv[1])==2)
+                    updateInverseMatrix_TWO_VECTOR2(inverseMatrix->data,originalMatrix->data, col_vet, line_vet, originalMatrix->size );
+                else if(atoi(argv[1])==3)
+                    updateInverseMatrix0(inverseMatrix->data, col_vet, originalMatrix->size);
+                else if(atoi(argv[1])==4)
+                    updateInverseMatrix1(inverseMatrix->data, originalMatrix->size, line_vet);
+                else if(atoi(argv[1])==5)
+                    updateInverseMatrix2(originalMatrix->data, inverseMatrix->data, originalMatrix->size, originalMatrix->i, originalMatrix->j, originalMatrix->value_to_change);
+                else if(atoi(argv[1])==6)
+                    inverse_matrix6(inverseMatrix->size, originalMatrix->data, inverseMatrix->data, inverseMatrix->i, inverseMatrix->j, inverseMatrix->value_to_change);
+                else if(atoi(argv[1])==7)
+                   updateInverseMatrix7(originalMatrix->size, inverseMatrix->data, line_vet, col_vet);
+                else if(atoi(argv[1])==8)
+                   inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
 
-            printf("\nNova Matrix Inversa %dx%d:\n",inverseMatrix->size, inverseMatrix->size);
-            //printf("************ New Inverse Matrix (Sherman-Morrison):\n");
-            if(atoi(argv[1])==0)
-                updateInverseMatrix_ONE_VECTOR(inverseMatrix, col_vet, originalMatrix->j);
-            // updateInverseMatrix_TWO_VECTOR(inverseMatrix->data,originalMatrix->data, col_vet, line_vet, originalMatrix->size );
-            
-            else if(atoi(argv[1])==1)
-                updateInverse_ONE_VALUE(&originalMatrix, &inverseMatrix, originalMatrix->i , originalMatrix->j, originalMatrix->value_to_change);
-            else if(atoi(argv[1])==2)
-                updateInverseMatrix_TWO_VECTOR2(inverseMatrix->data,originalMatrix->data, col_vet, line_vet, originalMatrix->size );
-            else if(atoi(argv[1])==3)
-                updateInverseMatrix0(inverseMatrix->data, col_vet, originalMatrix->size);
-            else if(atoi(argv[1])==4)
-                updateInverseMatrix1(inverseMatrix->data, originalMatrix->size, line_vet);
-            else if(atoi(argv[1])==5)
-                updateInverseMatrix2(originalMatrix->data, inverseMatrix->data, originalMatrix->size, originalMatrix->i, originalMatrix->j, originalMatrix->value_to_change);
-            else if(atoi(argv[1])==6)
-                inverse_matrix6(inverseMatrix->size, originalMatrix->data, inverseMatrix->data, inverseMatrix->i, inverseMatrix->j, inverseMatrix->value_to_change);
-            else if(atoi(argv[1])==7)
-               updateInverseMatrix7(originalMatrix->size, inverseMatrix->data, line_vet, col_vet);
-            else if(atoi(argv[1])==8)
-               inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
+                printMatrix(inverseMatrix);
+                //printf("%d%s\n", atoi(argv[1]), "-----------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            }
+            //////////////////////////////////////DETERMINANTE MATRIZ//////////////////////////////////////////////////////
+            ///*
+            gsl_matrix *matrix = gsl_matrix_alloc(originalMatrix->size, originalMatrix->size);
+            for (int i = 0; i < originalMatrix->size; i++)
+                for (int j = 0; j < originalMatrix->size; j++)
+                    gsl_matrix_set(matrix, i, j, (double) inverseMatrix->data[i][j] );
 
-            printMatrix(inverseMatrix);
-            //printf("%d%s\n", atoi(argv[1]), "-----------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            // Compute the determinant
+            gsl_permutation *perm = gsl_permutation_alloc(originalMatrix->size);
+            int signum;
+            double determinant;
+
+            gsl_linalg_LU_decomp(matrix, perm, &signum);
+            determinant = gsl_linalg_LU_det(matrix, signum);
+
+            printf("Determinante: %lf\n", determinant);
+
+            // Clean up allocated memory
+            gsl_matrix_free(matrix);
+            gsl_permutation_free(perm);
+
+            //*/
+            ////////////////////////////////////////////////////////////////////////////////////////////
         }
         else{
             printf("ALOCATION ERROR\n");
