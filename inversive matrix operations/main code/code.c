@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "my_math.h"
+//#include "alglib-cpp/src/LinAlg.h"
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_linalg.h>
-
 
 // Structure to hold a matrix
 typedef struct {
