@@ -663,6 +663,10 @@ void inverse_matrix_8(int n, long double **matrix, long double ** inv_matrix) {
     }
 }
 
+void inverse_matrix_9(int n, long double **matrix, long double ** inv_matrix) {
+
+}
+
 /*
 I apologize for the confusion. The Sherman-Morrison formula is typically used to update the inverse of a matrix when a new column or row is added or removed from the original matrix. It is not used to directly update a specific value in the inverse matrix.
 
@@ -743,8 +747,8 @@ int main(int argc, char *argv[]) {
                     inverse_matrix6(inverseMatrix->size, originalMatrix->data, inverseMatrix->data, inverseMatrix->i, inverseMatrix->j, inverseMatrix->value_to_change);
                 else if(atoi(argv[1])==7)
                    updateInverseMatrix7(originalMatrix->size, inverseMatrix->data, line_vet, col_vet);
-                else if(atoi(argv[1])==8)
-                   inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
+                //else if(atoi(argv[1])==8)
+                //   inverse_matrix_8(originalMatrix->size, originalMatrix->data, inverseMatrix->data);
 
                 printMatrix(inverseMatrix);
                 //printf("%d%s\n", atoi(argv[1]), "-----------------------------------------------------------------------------------------------------------------------------------------------------\n");
